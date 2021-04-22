@@ -121,7 +121,6 @@ def Year_filter():
                 year_long[year]=[long_dec]
                 year_change[year]=[change]
                 
-        
     return (year_lat, year_long, year_change)
 
 def Make_Map(lat_li,long_li,change_li,year):
@@ -178,3 +177,46 @@ def csv_writer():
         writer.writeheader()
         writer.writerows(datapoints)
 
+def Year_filter1():
+    complete_dict=Find_Change_In_All_Wells()
+    year_lat=[]
+    year_long=[]
+    year_change=[]
+    for i in complete_dict:
+        change=complete_dict[i][4]
+        lat_int=int(complete_dict[i][0][0])
+        long_int=int(complete_dict[i][0][1])
+        lat_str=str(lat_int)
+        long_str=str(long_int)
+        if len(long_str) > 6:
+            long_deg=-float(long_str[0:3])
+            long_min=-float(long_str[3:5])/60
+            long_sec=-float(long_str[5:7])/3600
+            long_dec=long_deg+long_min+long_sec
+        else:
+            long_deg=-float(long_str[0:2])
+            long_min=-float(long_str[2:4])/60
+            long_sec=-float(long_str[4:6])/3600
+            long_dec=long_deg+long_min+long_sec
+            
+        lat_deg=float(lat_str[0:2])
+        lat_min=float(lat_str[2:4])/60
+        lat_sec=float(lat_str[4:6])/3600
+        lat_dec=lat_deg+lat_min+lat_sec
+        
+        year_lat.append(lat_dec)
+        year_long.append(long_dec)
+        year_change.append(change)
+        # if year in year_lat:
+        #     year_lat[year].append(lat_dec)
+        #     year_long[year].append(long_dec)
+        #     year_change[year].append(change)
+        # else:
+        #     year_lat[year]=[lat_dec]
+        #     year_long[year]=[long_dec]
+        #     year_change[year]=[change]
+                
+    return (year_lat, year_long, year_change)
+def Mapper1():
+    year_lat,year_long,year_change=Year_filter1()
+    Make_Map(year_lat,year_long,year_change,"95-13")
